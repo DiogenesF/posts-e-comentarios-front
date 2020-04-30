@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
+
 
 class PostController extends Controller
 {
@@ -12,9 +14,16 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $post;
+    public function __construct(Post $post) {
+        $this->post = $post;
+    }
+
     public function index()
     {
-        //
+        $posts = $this->post->all();
+        
+        return view("components.posts", compact("posts"));
     }
 
     /**
@@ -33,9 +42,10 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+            $this->post->create(["name"=> auth()->user()->name,"content"=>$request->conteudo ]);  
+            return redirect()->route("home");
     }
 
     /**

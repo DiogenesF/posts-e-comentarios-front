@@ -15,8 +15,16 @@
             <div class="col-12">
                 <div class="card">
                     <form action="{{ route('post.store') }}" method="POST">
+                        @csrf
                         <div class="card-header">Criar nova postagem</div>
                         <div class="card-body">
+                        @if($errors->any())
+                            <ul class="alert">
+                                @foreach($errors->all() as $error)
+                                    <li>{{$error}}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                             <label for="conteudo">Postagem</label>
                             <textarea name="conteudo" id="conteudo" rows="10" cols="80" ></textarea>
                         </div>
