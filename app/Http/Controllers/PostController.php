@@ -44,7 +44,9 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-            $this->post->create(["name"=> auth()->user()->name,"content"=>$request->conteudo ]);  
+            
+
+            $this->post->create(["name"=> auth()->user()->name,"content"=>$request->content ]);  
             return redirect()->route("home");
     }
 
@@ -90,6 +92,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->comments()->delete();
+        $post->delete();
+        return redirect()->route("home");   
     }
 }

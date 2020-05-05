@@ -25,8 +25,8 @@
                                 @endforeach
                             </ul>
                         @endif
-                            <label for="conteudo">Postagem</label>
-                            <textarea name="conteudo" id="conteudo" rows="10" cols="80" ></textarea>
+                            <label for="content">Postagem</label>
+                            <textarea name="content" id="content" rows="10" cols="80" ></textarea>
                         </div>
                         <div class="card-footer d-flex flex-row-reverse">
                             <button type="submit" class="btn btn-success">Enviar</button>
@@ -49,12 +49,12 @@
                         Mé faiz elementum girarzis, nisi eros vermeio. 
                     </p>
                     <hr>
-                    <a href="#comentarios-1" data-toggle="collapse" aria-expanded="false" aria-controls="comentarios-1">
+                    <a href="#comentarios-abc" data-toggle="collapse" aria-expanded="false" aria-controls="comentarios-abc">
                         <small>
                             comentários (2)
                         </small>
                     </a>
-                    <div class="my-2 comentarios collapse" id="comentarios-1">
+                    <div class="my-2 comentarios collapse" id="comentarios-abc">
                         @comentario(["autor"=>"João lindão"])
                             Mussum Ipsum, cacilds vidis litro abertis. Posuere libero varius.
                             Nullam a nisl ut ante blandit hendrerit. Aenean sit amet nisi.
@@ -97,12 +97,12 @@
                         Mussum Ipsum, cacilds vidis litro abertis. Em pé sem cair, deitado sem dormir, sentado sem cochilar e fazendo pose. Mé faiz elementum girarzis, nisi eros vermeio. Copo furadis é disculpa de bebadis, arcu quam euismod magna. Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl. 
                     </p>
                     <hr>
-                    <a href="#comentarios-2" data-toggle="collapse" aria-expanded="false" aria-controls="comentarios-2">
+                    <a href="#comentarios-bcd" data-toggle="collapse" aria-expanded="false" aria-controls="comentarios-bcd">
                         <small>
                             comentários (2)
                         </small>
                     </a>
-                    <div class="my-2 comentarios collapse" id="comentarios-2">
+                    <div class="my-2 comentarios collapse" id="comentarios-bcd">
                         @comentario(['autor'=>"Eu mesmo"])
                             Mussum Ipsum, cacilds vidis litro abertis. 
                             Cevadis im ampola pa arma uma pindureta. Per aumento de cachacis, eu reclamis. 
@@ -135,6 +135,68 @@
                 </div>
             </div>
         </div>
+
+
+        @foreach($posts ?? '' as $post)
+            <div class="col-md-6 col-12">
+                <div class="card">
+                    <div style="display: flex;justify-content: space-between;" class="card-header">Titulo da postagem
+                    @if(auth()->user())
+                        @if($post->name == auth()->user()->name)
+                            <form method="POST" action="{{ route('post.destroy', [$post->id]) }}">
+                                @csrf
+                                @method("DELETE")
+                                <button style="background-color:red" type="submit">Delete</button>
+                            </form>
+                        @endif
+                    @endif
+                    </div>
+                    <div class="card-body">
+                        <h5>Autor: {{$post->name}}</h5>
+                        <p>
+                            {!! $post->content !!}
+                        </p>
+                        <hr>
+                        <a href="#comentarios-{{$post->id}}" data-toggle="collapse" aria-expanded="false" aria-controls="comentarios-{{$post->id}}">
+                            <small>
+                                comentários ( {{count($post->comments)}} )
+                            </small>
+                        </a>
+                        @foreach($post->comments as $comment)
+                        <div class="my-2 comentarios collapse" id="comentarios-{{$post->id}}">
+                        @comentario(['autor'=>$comment->name])
+                            {{ $comment->comment }}
+                        @endcomentario
+                        </div>
+                        @endforeach
+                        @auth
+                            <hr>
+                            <div>
+                                <form action="{{ route('comentario.store',1) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="postagem" value="{{$post->id}}">
+                                    <div class="form-group">
+                                    @if($errors->any())
+                                        <ul class="alert">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error}}</li>
+                                        @endforeach
+                                        </ul>
+                                    @endif
+                                        <label for="comment">Comentario</label>
+                                        <textarea name="comment" id="comment" class="form-control"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Salvar comentário</button>
+                                </form>
+                            </div>    
+                        @endauth
+                    </div>
+                </div>
+            </div>
+        @endforeach
+
+
+
     </div>
 </div>
 @endsection
@@ -142,7 +204,7 @@
 @section('script')
     <script>
         window.onload = function(){ 
-            CKEDITOR.replace('conteudo')
+            CKEDITOR.replace('content')
             CKEDITOR.config.height = 100;
         }
     </script>

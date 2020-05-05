@@ -15,7 +15,7 @@ class CommentController extends Controller
     }
 
     public function store(CommentRequest $request) {
-        $this->comment->create(["post_id"=>$request->postagem,"comment"=>$request->comentario,"name"=>auth()->user()->name,"email"=>auth()->user()->email]);  
+        $this->comment->create(["post_id"=>$request->postagem,"comment"=>$request->comment,"name"=>auth()->user()->name,"email"=>auth()->user()->email]);  
         return redirect()->route("home");
     }
 }

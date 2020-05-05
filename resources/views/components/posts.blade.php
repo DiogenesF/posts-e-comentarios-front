@@ -47,8 +47,8 @@
                                         @endforeach
                                         </ul>
                                     @endif
-                                        <label for="comentario">Comentario</label>
-                                        <textarea name="comentario" id="comentario" class="form-control"></textarea>
+                                        <label for="comment">Comentario</label>
+                                        <textarea name="comment" id="comment" class="form-control"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-sm">Salvar comentário</button>
                                 </form>
